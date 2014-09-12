@@ -34,6 +34,9 @@ elseif strcmpi(measure,'power')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     power = load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     testdata = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup))),3) * 100;
+elseif strcmpi(measure,'mean')
+    load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
+    testdata = mean(mean(allcoh(:,bandidx,:,:),4),3);
 elseif strcmpi(measure,'pac')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     allpac = allpac(:,:,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup)));
@@ -122,7 +125,7 @@ set(gcf,'Position',figpos);
 
 hold all
 if strcmpi(measure,'power')
-    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontaldelta'))),3) * 100;
+    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
 end
 dataout = [];
 grpout = [];
@@ -141,7 +144,7 @@ end
 hdl = barweb(groupmean,groupste,[],[],[],'','');
 [~,pval,~,stats] = ttest2(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),...
     testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),[],[],'unequal');
-fprintf('t = %.2f, p = %.4f.\n',stats.tstat,pval);
+fprintf('t(%.1f) = %.2f, p = %.3f.\n',stats.df,stats.tstat,pval);
 set(hdl.ax,'FontName',fontname,'FontSize',fontsize);
 defcolororder = get(0,'DefaultAxesColorOrder');
 set(hdl.bars(2),'FaceColor',defcolororder(2,:));
