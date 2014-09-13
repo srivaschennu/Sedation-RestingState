@@ -32,13 +32,13 @@ end
 
 group = cat(1,repmat({'Responsive'},13,1),repmat({'Drowsy'},7,1));
 
-% datatable = table(group,data(:,1),data(:,2),data(:,3),'VariableNames',{'group','Baseline','Moderate','Recovery'});
-% design = table({'Baseline'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
-% rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
+datatable = table(group,data(:,1),data(:,2),data(:,3),'VariableNames',{'group','Baseline','Moderate','Recovery'});
+design = table({'Baseline'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
+rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
 
-datatable = table(group,data(:,1),data(:,2),'VariableNames',{'group','Baseline','Moderate'});
-design = table({'Baseline'; 'Moderate'},'VariableNames',{'Levels'});
-rmmodel = fitrm(datatable,'Baseline-Moderate~group','WithinDesign',design);
+% datatable = table(group,data(:,1),data(:,2),'VariableNames',{'group','Baseline','Moderate'});
+% design = table({'Baseline'; 'Moderate'},'VariableNames',{'Levels'});
+% rmmodel = fitrm(datatable,'Baseline-Moderate~group','WithinDesign',design);
 
 rmanovatbl = ranova(rmmodel)
 
