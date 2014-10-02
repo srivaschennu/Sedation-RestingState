@@ -90,7 +90,7 @@ else
         };
 end
 
-levelnames = {'Baseline','Mild Sedation','Moderate','Recovery'};
+levelnames = {'Baseline','Mild','Moderate','Recovery'};
 
 testgroups = [1 2];
 
@@ -119,13 +119,13 @@ close(gcf);
 
 figure('Color','white');
 figpos = get(gcf,'Position');
-figpos(3) = figpos(3)*2/3;
+figpos(3) = figpos(3)*1/2;
 % figpos(4) = figpos(4)/2;
 set(gcf,'Position',figpos);
 
 hold all
 if strcmpi(measure,'power')
-    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
+    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontaldelta'))),3) * 100;
 end
 dataout = [];
 grpout = [];

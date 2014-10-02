@@ -34,7 +34,7 @@ grouplist = {
     'Drowsy'
     };
 
-levelnames = {'Baseline','Mild Sedation','Moderate Sedation','Recovery'};
+levelnames = {'Baseline','Mild','Moderate','Recovery'};
 
 for g = 1:length(grouplist)
     groupcoh(g,:,:) = squeeze(mean(allcoh(grp(:,5) == g & grp(:,1) == plotlevel,bandidx,:,:),1));
