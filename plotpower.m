@@ -1,14 +1,21 @@
-function plotpower(listname,conntype,plotlevel)
+function plotpower(listname,conntype,plotlevel,varargin)
 
 loadpaths
 loadsubj
+
+param = finputcheck(varargin, {
+    'xlabel', 'string', [], ''; ...
+    'ylabel', 'string', [], ''; ...
+    'xlim', 'real', [], []; ...
+    'ylim', 'real', [], []; ...
+    });
 
 load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
 load chanlist
 load freqlist
 
 fontname = 'Helvetica';
-fontsize = 28;
+fontsize = 32;
 
 bands = {
     'Delta'
@@ -24,7 +31,7 @@ grouplist = {
     'Drowsy'
     };
 
-levelnames = {'Baseline','Mild Sedation','Moderate Sedation','Recovery'};
+levelnames = {'Baseline','Mild','Moderate','Recovery'};
 
 loadsubj
 subjlist = eval(listname);
@@ -69,12 +76,23 @@ for g = 1:length(groups)
     figure('Color','white');
     plot(freqbins,10*log10(squeeze(mean(spectra(grp(:,1) == plotlevel & grp(:,5) == groups(g),:,:),1))),'LineWidth',2);
     set(gca,'XLim',[0 35],'YLim',[-25 25],'FontName',fontname,'FontSize',fontsize);
-    if g == 1
+    if strcmp(param.xlabel,'on') && g == 1
         xlabel('Frequency (Hz)','FontName',fontname,'FontSize',fontsize);
-        ylabel('Power (dB)','FontName',fontname,'FontSize',fontsize);
     else
         xlabel(' ','FontName',fontname,'FontSize',fontsize);
+        set(gca,'XTick',[]);
+    end
+    if strcmp(param.ylabel,'on') && g == 1
+        ylabel('Power (dB)','FontName',fontname,'FontSize',fontsize);
+    else
         ylabel(' ','FontName',fontname,'FontSize',fontsize);
+        set(gca,'YTick',[]);
+    end
+    if ~isempty(param.xlim)
+        xlim(param.xlim);
+    end
+    if ~isempty(param.ylim)
+        ylim(param.ylim);
     end
     for f = 1:4%size(freqlist,1)
         line([freqlist(f,1) freqlist(f,1)],ylim,'LineWidth',1,'LineStyle','--','Color','black');
