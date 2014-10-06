@@ -79,12 +79,12 @@ bands = {
     };
 
 for g = grouplist
-    sg_h(g) = scatter(grp(grp(:,5) == g & grp(:,1) ~= 1,1),plotdata(grp(:,5) == g & grp(:,1) ~= 1),200,markers{g},...
+    sg_h(g) = scatter(grp(grp(:,5) == g,1),plotdata(grp(:,5) == g),200,markers{g},...
         'filled','DisplayName',groupnames{g});
 end
 
 set(gca,'FontSize',fontsize,'FontName',fontname);
-set(gca,'XTick',unique(grp(grp(:,5) == g & grp(:,1) ~= 1,1)),'XTickLabel',levelnames(2:4));
+set(gca,'XTick',unique(grp(grp(:,5) == g,1)),'XTickLabel',levelnames);
 set(gcf,'Color','white');
 
 if strcmp(param.xlabel,'on')
@@ -105,7 +105,7 @@ end
 for s = 1:4:size(subjlist,1)
     if sum(ismember(grp(s,5),grouplist)) == 1
         linecolor = get(sg_h(grp(s,5)),'CData');
-        %         line([grp(s,1) grp(s+1,1)],[plotdata(s) plotdata(s+1)],'Color',linecolor,'LineWidth',1);
+        line([grp(s,1) grp(s+1,1)],[plotdata(s) plotdata(s+1)],'Color',linecolor,'LineWidth',1);
         line([grp(s+1,1) grp(s+2,1)],[plotdata(s+1) plotdata(s+2)],'Color',linecolor,'LineWidth',1);
         line([grp(s+2,1) grp(s+3,1)],[plotdata(s+2) plotdata(s+3)],'Color',linecolor,'LineWidth',1);
     end

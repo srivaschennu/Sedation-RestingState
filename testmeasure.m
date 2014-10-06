@@ -2,8 +2,8 @@ function [dataout,grpout,pval,stats] = testmeasure(listname,conntype,measure,tes
 
 param = finputcheck(varargin, {
     'changroup', 'string', [], ''; ...
-    'xlabel', 'string', [], ''; ...
-    'ylabel', 'string', [], measure; ...
+    'xlabel', 'string', [], measure; ...
+    'ylabel', 'string', [], ''; ...
     'xlim', 'real', [], []; ...
     'ylim', 'real', [], []; ...
     });
@@ -94,29 +94,25 @@ levelnames = {'Baseline','Mild','Moderate','Recovery'};
 
 testgroups = [1 2];
 
+
+%scatter plot
 markers = {'^','v'};
 figure('Color','white');
 hold all
-scatter(hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(1)),testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),...
+scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(1)),...
     200,'blue',markers{testgroups(1)},'filled');
-sg_h = scatter(hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),...
+sg_h = scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),...
     200,'green',markers{testgroups(2)},'filled');
 set(sg_h,'MarkerFaceColor',[0 0.5 0]);
 set(gca,'FontName',fontname,'FontSize',fontsize);
-xlabel('Perceptual Accuracy (%)','FontName',fontname,'FontSize',fontsize);
-ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+xlabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+ylabel('Perceptual Accuracy (%)','FontName',fontname,'FontSize',fontsize);
 
-xdata = hitrate(grp(:,1) == 3);
-ydata = testdata(grp(:,1) == testlevel);
-
-% for d = 1:length(xdata)
-%     text(1.05*xdata(d),1.05*ydata(d),sprintf('%d',d),'FontName',fontname,'FontSize',fontsize-4);
-% end
 export_fig(gcf,sprintf('figures/%s_scatter_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
 
-% title('Level 2 Hit Rate vs Level 0 Graph Theory Metrics');
 
+%bar graph
 figure('Color','white');
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*1/2;
@@ -152,29 +148,43 @@ xlabel(levelnames{testlevel},'FontName',fontname,'FontSize',fontsize);
 ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
 % set(gca,'YTick',[]);
 set(gcf,'Color','white');
-if ~isempty(param.ylim)
-    ylim(param.ylim);
+if ~isempty(param.xlim)
+    ylim(param.xlim);
 end
 export_fig(gcf,sprintf('figures/%s_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
 
-%title('Level 0 Graph Theory Metrics: Fully Responsive vs Decreased Hit Rates at Level 2');
 
 % Correlate Graph Theory vs Drug Level
-xdata = drug(grp(:,1) == testlevel & (grp(:,5) == 1 | grp(:,5) == 2));
-ydata = testdata(grp(:,1) == testlevel & (grp(:,5) == 1 | grp(:,5) == 2));
+for g = 1:2
+    xdata{g,1} = testdata(grp(:,1) == testlevel & (grp(:,5) == g));
+    ydata{g,1} = drug(grp(:,1) == testlevel & (grp(:,5) == g));
+end
 figure('Color','white');
 hold all
-legendoff(scatter(drug(grp(:,1) == testlevel & grp(:,5) == 1),testdata(grp(:,1) == testlevel & grp(:,5) == 1),200,'^','blue','filled'));
-legendoff(scatter(drug(grp(:,1) == testlevel & grp(:,5) == 2),testdata(grp(:,1) == testlevel & grp(:,5) == 2),200,'v','green','filled'));
 
-mdl = LinearModel.fit(xdata,ydata,'RobustOpts','on');
+xvals = cell2mat(xdata);
+yvals = cell2mat(ydata);
+keepvals = true(length(xvals),1);
+keepvals(isnan(cell2mat(xdata))) = 0;
+[~,~,~,outid,~,~] = skipped_correlation(xvals(keepvals),yvals(keepvals),0);
+keepvals(outid{1}) = 0;
+keepidx{1,1} = keepvals(1:length(xdata{1}),1);
+keepidx{2,1} = keepvals(length(xdata{1})+1 : (length(xdata{1})+length(xdata{2})) );
+
+legendoff(scatter(xdata{1}(keepidx{1}),ydata{1}(keepidx{1}),200,'^','blue','filled'));
+legendoff(scatter(xdata{1}(~keepidx{1}),ydata{1}(~keepidx{1}),200,'^','blue'));
+legendoff(scatter(xdata{2}(keepidx{2}),ydata{2}(keepidx{2}),200,'v','green','filled'));
+legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,'v','green'));
+
+mdl = LinearModel.fit(xvals(keepvals),yvals(keepvals));
 b = mdl.Coefficients.Estimate;
-plot(sort(xdata),b(1)+b(2)*sort(xdata),'Color','black','LineWidth',2,'LineStyle','--',......
+plot(sort(xvals),b(1)+b(2)*sort(xvals),'Color','black','LineWidth',2,'LineStyle','--',......
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+
 set(gca,'FontName',fontname,'FontSize',fontsize);
-xlabel('Drug in blood (\mug/l)','FontName',fontname,'FontSize',fontsize);
-ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
+ylabel('Drug in blood (\mug/l)','FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)
     xlim(param.xlim);
 end
@@ -190,22 +200,37 @@ export_fig(gcf,sprintf('figures/%s_vs_drug_%s_%s.eps',measure,levelnames{testlev
 close(gcf);
 
 % Correlate Perceptual RT with Graph Theory Metrics
-xdata = rt(grp(:,1) == testlevel & grp(:,5) == 1) ./ rt(grp(:,1) == 4 & grp(:,5) == 1);
-ydata = testdata(grp(:,1) == testlevel & grp(:,5) == 1) ./ testdata(grp(:,1) == 4 & grp(:,5) == 1);
+xdata = testdata(grp(:,1) == testlevel & grp(:,5) == 1) ./ testdata(grp(:,1) == 4 & grp(:,5) == 1);
+ydata = rt(grp(:,1) == testlevel & grp(:,5) == 1) ./ rt(grp(:,1) == 4 & grp(:,5) == 1);
 figure('Color','white');
 hold all
-legendoff(scatter(xdata(:,1),ydata,200,'^','blue','filled'));
-mdl = LinearModel.fit(xdata,ydata,'RobustOpts','on');
+
+keepidx = true(length(xdata),1);
+keepidx(isnan(xdata)) = 0;
+[~,~,~,outid,~,~] = skipped_correlation(xdata(keepidx),ydata(keepidx),0);
+keepidx(outid{1}) = 0;
+
+legendoff(scatter(xdata(keepidx),ydata(keepidx),200,'^','blue','filled'));
+legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,'^','blue'));
+
+mdl = LinearModel.fit(xdata(keepidx),ydata(keepidx));
 b = mdl.Coefficients.Estimate;
 plot(sort(xdata),b(1)+b(2)*sort(xdata),'Color','black','LineWidth',2,'LineStyle','--',...
     'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+
 set(gca,'FontName',fontname,'FontSize',fontsize);
-if isempty(param.xlabel)
-    xlabel(sprintf('Relative reaction time',levelnames{testlevel},levelnames{end}),'FontName',fontname,'FontSize',fontsize);
+xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
+if isempty(param.ylabel)
+    ylabel('Relative reaction time','FontName',fontname,'FontSize',fontsize);
 else
-    xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
+    ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
 end
-ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+if ~isempty(param.xlim)
+    xlim(param.xlim);
+end
+if ~isempty(param.ylim)
+    ylim(param.ylim);
+end
 legend('Location','Best');
 legend('boxoff');
 
@@ -216,4 +241,3 @@ set(gcf,'Position',figpos);
 
 export_fig(gcf,sprintf('figures/%s_vs_rt_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
-% Correlate Hit Rates at Level 2 with Graph Theory at Level 0
