@@ -121,7 +121,7 @@ set(gcf,'Position',figpos);
 
 hold all
 if strcmpi(measure,'power')
-    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontaldelta'))),3) * 100;
+    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
 end
 dataout = [];
 grpout = [];
@@ -148,8 +148,8 @@ xlabel(levelnames{testlevel},'FontName',fontname,'FontSize',fontsize);
 ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
 % set(gca,'YTick',[]);
 set(gcf,'Color','white');
-if ~isempty(param.xlim)
-    ylim(param.xlim);
+if ~isempty(param.ylim)
+    ylim(param.ylim);
 end
 export_fig(gcf,sprintf('figures/%s_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
