@@ -36,7 +36,7 @@ elseif strcmpi(measure,'power')
     testdata = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup))),3) * 100;
 elseif strcmpi(measure,'mean')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
-    testdata = mean(mean(allcoh(:,bandidx,:,:),4),3);
+    testdata = mean(mean(allcoh(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup))),4),3);
 elseif strcmpi(measure,'pac')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     allpac = allpac(:,:,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup)));
