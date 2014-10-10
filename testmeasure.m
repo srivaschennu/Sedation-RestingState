@@ -6,6 +6,8 @@ param = finputcheck(varargin, {
     'ylabel', 'string', [], ''; ...
     'xlim', 'real', [], []; ...
     'ylim', 'real', [], []; ...
+    'xtick', 'real', [], []; ...
+    'ytick', 'real', [], []; ...
     });
 
 fontname = 'Helvetica';
@@ -21,6 +23,11 @@ subjlist = eval(listname);
 drug = cell2mat(subjlist(:,3));
 rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
+
+colorlist = [
+    0 0.0 1
+    0 0.5 0
+    ];
 
 weiorbin = 2;
 
@@ -100,9 +107,9 @@ markers = {'^','v'};
 figure('Color','white');
 hold all
 scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(1)),...
-    200,'blue',markers{testgroups(1)},'filled');
+    200,colorlist(1,:),markers{testgroups(1)},'filled');
 sg_h = scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),...
-    200,'green',markers{testgroups(2)},'filled');
+    200,colorlist(2,:),markers{testgroups(2)},'filled');
 set(sg_h,'MarkerFaceColor',[0 0.5 0]);
 set(gca,'FontName',fontname,'FontSize',fontsize);
 xlabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
@@ -146,7 +153,9 @@ defcolororder = get(0,'DefaultAxesColorOrder');
 set(hdl.bars(2),'FaceColor',defcolororder(2,:));
 xlabel(levelnames{testlevel},'FontName',fontname,'FontSize',fontsize);
 ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
-% set(gca,'YTick',[]);
+if ~isempty(param.ytick)
+    set(gca,'YTick',param.ytick);
+end
 set(gcf,'Color','white');
 if ~isempty(param.ylim)
     ylim(param.ylim);
@@ -172,10 +181,10 @@ keepvals(outid{1}) = 0;
 keepidx{1,1} = keepvals(1:length(xdata{1}),1);
 keepidx{2,1} = keepvals(length(xdata{1})+1 : (length(xdata{1})+length(xdata{2})) );
 
-legendoff(scatter(xdata{1}(keepidx{1}),ydata{1}(keepidx{1}),200,'^','blue','filled'));
-legendoff(scatter(xdata{1}(~keepidx{1}),ydata{1}(~keepidx{1}),200,'^','blue'));
-legendoff(scatter(xdata{2}(keepidx{2}),ydata{2}(keepidx{2}),200,'v','green','filled'));
-legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,'v','green'));
+legendoff(scatter(xdata{1}(keepidx{1}),ydata{1}(keepidx{1}),200,colorlist(1,:),'^','filled'));
+legendoff(scatter(xdata{1}(~keepidx{1}),ydata{1}(~keepidx{1}),200,colorlist(1,:),'^'));
+legendoff(scatter(xdata{2}(keepidx{2}),ydata{2}(keepidx{2}),200,colorlist(2,:),'v','filled'));
+legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,colorlist(2,:),'v'));
 
 mdl = LinearModel.fit(xvals(keepvals),yvals(keepvals));
 b = mdl.Coefficients.Estimate;
@@ -195,6 +204,9 @@ figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*3/2;
 % figpos(4) = figpos(4)/2;
 set(gcf,'Position',figpos);
+if ~isempty(param.xtick)
+    set(gca,'XTick',param.xtick);
+end
 
 export_fig(gcf,sprintf('figures/%s_vs_drug_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
@@ -210,8 +222,8 @@ keepidx(isnan(xdata)) = 0;
 [~,~,~,outid,~,~] = skipped_correlation(xdata(keepidx),ydata(keepidx),0);
 keepidx(outid{1}) = 0;
 
-legendoff(scatter(xdata(keepidx),ydata(keepidx),200,'^','blue','filled'));
-legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,'^','blue'));
+legendoff(scatter(xdata(keepidx),ydata(keepidx),200,colorlist(1,:),'^','filled'));
+legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,colorlist(1,:),'^'));
 
 mdl = LinearModel.fit(xdata(keepidx),ydata(keepidx));
 b = mdl.Coefficients.Estimate;
