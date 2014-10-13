@@ -108,12 +108,26 @@ figure('Color','white');
 hold all
 scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(1)),...
     200,colorlist(1,:),markers{testgroups(1)},'filled');
-sg_h = scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),...
+scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),...
     200,colorlist(2,:),markers{testgroups(2)},'filled');
-set(sg_h,'MarkerFaceColor',[0 0.5 0]);
 set(gca,'FontName',fontname,'FontSize',fontsize);
-xlabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
-ylabel('Perceptual Accuracy (%)','FontName',fontname,'FontSize',fontsize);
+if isempty(param.ylabel)
+    ylabel('Perceptual hit rate (%)','FontName',fontname,'FontSize',fontsize);
+else
+    ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+end
+
+xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
+if ~isempty(param.xlim)
+    set(gca,'XLim',param.xlim);
+end
+if ~isempty(param.ytick)
+    set(gca,'YTick',param.ytick);
+end
+
+figpos = get(gcf,'Position');
+figpos(3) = figpos(3)*9/8;
+set(gcf,'Position',figpos);
 
 export_fig(gcf,sprintf('figures/%s_scatter_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
 close(gcf);
