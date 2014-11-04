@@ -66,14 +66,16 @@ vsize(vsize < 0) = 0;
 
 % assign all modules with only one vertex the same colour
 modsize = hist(minfo,unique(minfo));
+[modsize,modidx] = sort(modsize,'descend');
+
 num_mod = sum(modsize > 1);
-modidx = 1;
+mcount = 1;
 for m = 1:length(modsize)
-    if modsize(m) == 1
+    if modsize(modidx == m) == 1
         minfo(minfo == m) = num_mod + 1;
     else
-        minfo(minfo == m) = modidx;
-        modidx = modidx + 1;
+        minfo(minfo == m) = mcount;
+        mcount = mcount + 1;
     end
 end
 num_mod = length(unique(minfo));
