@@ -15,6 +15,7 @@ param = finputcheck(varargin, {
     'plotinter', 'string', {'on','off'}, 'off'; ...
     'escale', 'real', [], []; ...
     'vscale', 'real', [], []; ...
+    'view', 'real', [], []; ...
     });
 
 %%%%% VISUAL FEATURES
@@ -65,6 +66,7 @@ vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
 vsize(vsize < 0) = 0;
 
 % assign all modules with only one vertex the same colour
+minfo = minfo - min(minfo) + 1;
 modsize = hist(minfo,unique(minfo));
 [modsize,modidx] = sort(modsize,'descend');
 
@@ -80,12 +82,14 @@ for m = 1:length(modsize)
 end
 num_mod = length(unique(minfo));
 
-figure('Color','black','Name',mfilename);
-colormap(jet);
+
 cmap = colormap;
 
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.4 param.vscale(2)+0.4],'view','frontleft');
-hold all
+if isempty(param.view)
+    param.view = 'frontleft';
+end
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.4 param.vscale(2)+0.4],'view',param.view);
+
 xlim('auto'); ylim('auto'); zlim('auto');
 
 for r = 1:size(matrix,1)
@@ -104,6 +108,3 @@ for r = 1:size(matrix,1)
         end
     end
 end
-
-figpos = get(gcf,'Position');
-set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*2 figpos(4)*2]);
