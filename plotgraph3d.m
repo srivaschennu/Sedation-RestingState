@@ -66,22 +66,22 @@ vsize = (vsize - param.vscale(1))/(param.vscale(2) - param.vscale(1));
 vsize(vsize < 0) = 0;
 
 % assign all modules with only one vertex the same colour
-minfo = minfo - min(minfo) + 1;
 modsize = hist(minfo,unique(minfo));
-[modsize,modidx] = sort(modsize,'descend');
-
 num_mod = sum(modsize > 1);
-mcount = 1;
-for m = 1:length(modsize)
-    if modsize(modidx == m) == 1
-        minfo(minfo == m) = num_mod + 1;
-    else
-        minfo(minfo == m) = mcount;
-        mcount = mcount + 1;
+modidx = 1;
+newminfo = zeros(size(minfo));
+for i = 1:length(newminfo)
+    if newminfo(i) == 0
+        if modsize(minfo(i)) == 1
+            newminfo(i) = num_mod + 1;
+        else
+            newminfo(minfo == minfo(i)) = modidx;
+            modidx = modidx + 1;
+        end
     end
 end
+minfo = newminfo;
 num_mod = length(unique(minfo));
-
 
 cmap = colormap;
 
@@ -99,11 +99,11 @@ for r = 1:size(matrix,1)
             if minfo(r) == minfo(c)
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
                 ecol = cmap(ceil((minfo(r)/num_mod)*size(cmap,1)),:);
-                set(hLine,'Color',ecol,'LineWidth',0.5);
+                set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
                 ecol = [0 0 0];
-                set(hLine,'Color',ecol,'LineWidth',0.5);
+                set(hLine,'Color',ecol,'LineWidth',0.1);
             end
         end
     end

@@ -7,7 +7,7 @@ plotqt = 0.7;
 load(sprintf('%s%s//%02d_wpli.mat',filepath,conntype,subjid));
 load 91_chanlocs
 
-numinterp = 25;
+numinterp = 20;
 for g = 1:length(matrix)
     if ~isnan(matrix{g})
         groupcoh(g,:,:) = matrix{g};
@@ -35,30 +35,27 @@ for t = 1:size(allcoh,1)
         minfo(t,:) = modularity_louvain_und(threshold_proportional(squeeze(allcoh(t,:,:)),1-plotqt));
 end
 
-smoothwin = 5;
-for t = 1:size(allcoh,1)-smoothwin
-    smoothminfo(t:t+smoothwin-1,:) = repmat(round(mean(minfo(t:t+smoothwin-1,:),1)),5,1);
-end
-minfo = smoothminfo;
-viewangles = linspace(1,360,size(allcoh,1));
 mkdir(sprintf('figures/%02d_headmovie',subjid));
 
 figure('Color','black','Name',mfilename);
 colormap(jet);
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*2 figpos(4)*2],'Color','black');
+hold all
 
 for t = 1:size(allcoh,1)
     plotgraph3d(squeeze(allcoh(t,:,:)),chanlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,...
-        'minfo',minfo(t,:),'view',[viewangles(t) 0]);
-    set(gca,'CameraViewAngleMode','manual')
-    hold all
+        'minfo',minfo(t,:));
+    camva(7.5);
+    camtarget([-9.7975  -28.8277   41.8981]);
+    campos([-1.7547    1.7161    1.4666]*1000);
+
 
 %     ViewZ = [0 0; 360 0];
 % %     ViewZ = cat(2,ViewZ,zeros(size(ViewZ,1),1));
 %     OptionZ.Duration=5;OptionZ.Periodic=true;
 %     CaptureFigVid(ViewZ,sprintf('figures/headmovie_%s_%s',grouplist{g},bands{bandidx}),OptionZ)
-    set(gcf,'Name',sprintf('%02d_%02d',subjid,t));
+    set(gcf,'Name',sprintf('%02d_%02d',subjid,t),'InvertHardCopy','off');
     saveas(gcf,sprintf('figures/%02d_headmovie/%02d_%02d.jpg',subjid,subjid,t));%,'-m2');
 %     export_fig(gcf,sprintf('figures/%02d_headmovie/%02d_%02d.tif',subjid,subjid,t),'-nocrop');%,'-m2');
 end
