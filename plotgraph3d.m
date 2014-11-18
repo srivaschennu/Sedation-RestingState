@@ -36,7 +36,7 @@ lhfactor = 2;
 % matrix = matrix(sortidx,sortidx);
 
 % keep only top <plotqt>% of weights
-matrix = threshold_proportional(matrix,1-param.plotqt);
+% matrix = threshold_proportional(matrix,1-param.plotqt);
 
 for c = 1:size(matrix,1)
     vsize(c) = sum(matrix(c,:))/(size(matrix,2)-1);
