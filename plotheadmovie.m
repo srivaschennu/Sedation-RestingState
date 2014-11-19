@@ -5,7 +5,7 @@ loadpaths
 plotqt = 0.7;
 load 91_chanlocs
 
-% skipframes = 2;
+% skipframes = 1;
 % for s = 1:length(subjids)
 %     subjid = subjids(s);
 %     load(sprintf('%s%s//%02d_wpli.mat',filepath,conntype,subjid),'matrix');
@@ -31,12 +31,12 @@ load 91_chanlocs
 % numframes = [size(groupcoh{1},1) size(groupcoh{2},1)];
 % groupcoh = cat(1,groupcoh{1},groupcoh{2});
 % groupdeg = cat(1,groupdeg{1},groupdeg{2});
-% 
-% erange = [min(nonzeros(groupcoh(:))) max(groupcoh(:))];
-% vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
+load tempdata.mat
 
-load matlab.mat
+erange = [min(nonzeros(groupcoh(:))) max(groupcoh(:))];
+vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
+
 mkdir(sprintf('figures/%02d_%02d_headmovie',subjids));
 
 figure('Color','black','Name',mfilename);
@@ -46,8 +46,8 @@ set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*4 figpos(4)*2],'Color','black'
 
 for t = 1:min(numframes)
     for p = 1:2
-        subplot(1,2,p);
-        hold all
+        subplot(1,2,p,'replace');
+        hold on
         plotgraph3d(squeeze(groupcoh(t+(p-1)*numframes(1),:,:)),chanlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange);
         camva(7.5);
         camtarget([-9.7975  -28.8277   41.8981]);
@@ -58,7 +58,8 @@ for t = 1:min(numframes)
     %     OptionZ.Duration=5;OptionZ.Periodic=true;
     %     CaptureFigVid(ViewZ,sprintf('figures/headmovie_%s_%s',grouplist{g},bands{bandidx}),OptionZ)
     set(gcf,'Name',sprintf('%02d_%02d',subjid,t),'InvertHardCopy','off');
-    saveas(gcf,sprintf('figures/%02d_headmovie/%02d_%02d.jpg',subjid,subjid,t));%,'-m2');
+
+    saveas(gcf,sprintf('figures/%02d_%02d_headmovie/%d.jpg',subjids,t));%,'-m2');
     %     export_fig(gcf,sprintf('figures/%02d_headmovie/%02d_%02d.tif',subjid,subjid,t),'-nocrop');%,'-m2');
 end
 close(gcf);
