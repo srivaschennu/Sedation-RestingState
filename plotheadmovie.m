@@ -44,9 +44,9 @@ colormap(jet);
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*4 figpos(4)*2],'Color','black');
 
-for t = 1:min(numframes)
-    for p = 1:2
-        subplot(1,2,p,'replace');
+for t = 1:1:min(numframes)
+    for p = 1:1
+%         subplot(1,2,p,'replace');
         hold on
         plotgraph3d(squeeze(groupcoh(t+(p-1)*numframes(1),:,:)),chanlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange);
         camva(7.5);
@@ -57,7 +57,7 @@ for t = 1:min(numframes)
     % %     ViewZ = cat(2,ViewZ,zeros(size(ViewZ,1),1));
     %     OptionZ.Duration=5;OptionZ.Periodic=true;
     %     CaptureFigVid(ViewZ,sprintf('figures/headmovie_%s_%s',grouplist{g},bands{bandidx}),OptionZ)
-    set(gcf,'Name',sprintf('%02d_%02d',subjid,t),'InvertHardCopy','off');
+%     set(gcf,'Name',sprintf('%02d_%02d',subjid,t),'InvertHardCopy','off');
 
     saveas(gcf,sprintf('figures/%02d_%02d_headmovie/%d.jpg',subjids,t));%,'-m2');
     %     export_fig(gcf,sprintf('figures/%02d_headmovie/%02d_%02d.tif',subjid,subjid,t),'-nocrop');%,'-m2');

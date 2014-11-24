@@ -26,6 +26,9 @@ splinefile = '91_spline.spl';
 % range of line heights
 lhfactor = 2;
 
+% number of colours (must be greater than number of modules
+numcolors = 6;
+
 %%%%%%
 
 % load chanlist
@@ -84,6 +87,7 @@ minfo = newminfo;
 num_mod = length(unique(minfo));
 
 cmap = colormap;
+colorlist = cmap(round(linspace(1,size(cmap,1),numcolors)),:);
 
 if isempty(param.view)
     param.view = 'frontleft';
@@ -97,7 +101,7 @@ for r = 1:size(matrix,1)
         if r < c && matrix(r,c) > 0
             eheight = (matrix(r,c)*lhfactor)+1;
             if minfo(r) == minfo(c)
-                ecol = cmap(ceil((minfo(r)/num_mod)*size(cmap,1)),:);
+                ecol = colorlist(minfo(r),:);
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.1);
 %                 set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
