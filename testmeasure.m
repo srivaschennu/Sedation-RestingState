@@ -8,6 +8,7 @@ param = finputcheck(varargin, {
     'ylim', 'real', [], []; ...
     'xtick', 'real', [], []; ...
     'ytick', 'real', [], []; ...
+    'legendlocation', 'string', [], 'Best'; ...
     });
 
 fontname = 'Helvetica';
@@ -257,7 +258,22 @@ end
 if ~isempty(param.ylim)
     ylim(param.ylim);
 end
-legend('Location','Best');
+
+% %optionally plot drowsy group at infinity reaction time
+% yticks = get(gca,'YTick');
+% ylimits = ylim;
+% ylim([ylimits(1) ylimits(2) + (yticks(2)-yticks(1))]);
+% 
+% xdata2 = testdata(grp(:,1) == testlevel & grp(:,5) == 2) ./ testdata(grp(:,1) == 4 & grp(:,5) == 2);
+% ydata2 = repmat(yticks(end) + (yticks(2)-yticks(1)),length(xdata2),1);
+% legendoff(scatter(xdata2,ydata2,200,colorlist(2,:),'v','filled'));
+% 
+% yticklabels = get(gca,'YTickLabel');
+% yticklabels = mat2cell(yticklabels,ones(size(yticklabels,1),1));
+% yticklabels{end} = '   ';
+% set(gca,'YTickLabel',yticklabels);
+
+legend('Location',param.legendlocation);
 legend('boxoff');
 
 figpos = get(gcf,'Position');
