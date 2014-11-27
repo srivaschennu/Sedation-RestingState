@@ -48,9 +48,14 @@ erange = [min(nonzeros(threshcoh(:))) max(threshcoh(:))];
 vrange = [min(nonzeros(groupdeg(:))) max(groupdeg(:))];
 
 for g = 1:length(grouplist)
-    minfo(g,:) = plotgraph(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange,'legend','off','plotinter','off');
+    minfo(g,:) = plotgraph3d(squeeze(groupcoh(g,:,:)),sortedlocs,'plotqt',plotqt,'escale',erange,'vscale',vrange);
+    camva(8);
+    camtarget([-9.7975  -28.8277   41.8981]);
+    campos([-1.7547    1.7161    1.4666]*1000);
     fprintf('%s %s %s - number of modules: %d\n',grouplist{g},levelnames{plotlevel},bands{bandidx},length(unique(minfo(g,:))));
     set(gcf,'Name',sprintf('%s %s %s',grouplist{g},levelnames{plotlevel},bands{bandidx}));
-    export_fig(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}));
+%     export_fig(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}));
+    set(gcf,'InvertHardCopy','off');
+    saveas(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}));
     close(gcf);
 end
