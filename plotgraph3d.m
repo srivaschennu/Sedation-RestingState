@@ -16,6 +16,8 @@ param = finputcheck(varargin, {
     'escale', 'real', [], []; ...
     'vscale', 'real', [], []; ...
     'view', 'real', [], []; ...
+    'cshift', 'real', [], []; ...    
+    'numcolors', 'real', [], 6; ...    
     });
 
 %%%%% VISUAL FEATURES
@@ -26,8 +28,6 @@ splinefile = '91_spline.spl';
 % range of line heights
 lhfactor = 2;
 
-% number of colours (must be greater than number of modules
-numcolors = 6;
 
 %%%%%%
 
@@ -88,16 +88,16 @@ num_mod = length(unique(minfo));
 
 figure('Color','black','Name',mfilename);
 figpos = get(gcf,'Position');
-set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*2 figpos(4)*2],'Color','black');
+set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
 cmap = colormap(hsv);
-colorlist = cmap(round(linspace(1,size(cmap,1),numcolors)),:);
+colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
 
 hold all
 
 if isempty(param.view)
     param.view = 'frontleft';
 end
-[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-0.4 param.vscale(2)+0.4],'view',param.view);
+[~,chanlocs3d] = headplot(vsize,splinefile,'electrodes','off','maplimits',[param.vscale(1)-param.cshift param.vscale(2)+param.cshift],'view',param.view);
 
 xlim('auto'); ylim('auto'); zlim('auto');
 
@@ -107,7 +107,7 @@ for r = 1:size(matrix,1)
             eheight = (matrix(r,c)*lhfactor)+1;
             if minfo(r) == minfo(c)
                 ecol = colorlist(minfo(r),:);
-                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.1);
+                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.5);
 %                 set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
