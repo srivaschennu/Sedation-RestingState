@@ -21,7 +21,7 @@ changroups
 load chanlist
 
 subjlist = eval(listname);
-drug = cell2mat(subjlist(:,3));
+drug = cell2mat(subjlist(:,3))/1000;
 rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
 
@@ -208,7 +208,7 @@ plot(sort(xvals),b(1)+b(2)*sort(xvals),'Color','black','LineWidth',2,'LineStyle'
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
-ylabel('Drug in blood (\mug/l)','FontName',fontname,'FontSize',fontsize);
+ylabel('Drug in blood (\mug/ml)','FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)
     xlim(param.xlim);
 end
@@ -221,6 +221,9 @@ figpos(3) = figpos(3)*3/2;
 set(gcf,'Position',figpos);
 if ~isempty(param.xtick)
     set(gca,'XTick',param.xtick);
+end
+if ~isempty(param.ylim)
+    ylim(param.ylim);
 end
 
 export_fig(gcf,sprintf('figures/%s_vs_drug_%s_%s.eps',measure,levelnames{testlevel},bands{bandidx}));
