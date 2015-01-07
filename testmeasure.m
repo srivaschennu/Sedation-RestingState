@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 28;
+fontsize = 30;
 
 loadpaths
 loadsubj
@@ -241,7 +241,7 @@ keepidx(isnan(xdata)) = 0;
 keepidx(outid{1}) = 0;
 
 legendoff(scatter(xdata(keepidx),ydata(keepidx),200,colorlist(1,:),'^','filled'));
-legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,colorlist(1,:),'^'));
+legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,colorlist(1,:),'^','filled'));
 
 mdl = LinearModel.fit(xdata(keepidx),ydata(keepidx));
 b = mdl.Coefficients.Estimate;

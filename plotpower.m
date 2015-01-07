@@ -15,7 +15,7 @@ load chanlist
 load freqlist
 
 fontname = 'Helvetica';
-fontsize = 32;
+fontsize = 34;
 
 bands = {
     'Delta'

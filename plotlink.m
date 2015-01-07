@@ -8,7 +8,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 28;
+fontsize = 30;
 
 loadpaths
 
@@ -46,16 +46,34 @@ switch measure
         plotdata = (grp(:,4)/40)*100;
         param.ylabel = 'Perceptual hit rate (%)';
     otherwise
-        if strcmp(measure,'modules') || strcmp(measure,'centrality')
-            plotdata = squeeze(mean(max(graph{m,weiorbin}(:,bandidx,trange,:),[],4),3));
-        elseif strcmp(measure,'mutual information')
-            plotdata = squeeze(mean(mean(graph{m,weiorbin}(:,:,bandidx,trange),4),2));
-        elseif strcmp(measure,'participation coefficient')
-            plotdata = squeeze(mean(std(graph{m,weiorbin}(:,bandidx,trange,:),[],4),3));
-        else
-            plotdata = squeeze(mean(mean(graph{m,weiorbin}(:,bandidx,trange,:),4),3));
-        end
+    trange = [0.5 0.1];
+    load(sprintf('%s%s//graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
+    trange = (tvals <= trange(1) & tvals >= trange(2));
+    
+    randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
+    graph{end+1,1} = 'small-worldness';
+    graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
+    
+    if ~strcmpi(measure,'small-worldness')
+        m = find(strcmpi(measure,graph(:,1)));
+        graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
+    end
+    m = find(strcmpi(measure,graph(:,1)));
+    if strcmpi(measure,'modules')
+        plotdata = squeeze(mean(max(graph{m,weiorbin}(:,bandidx,trange,:),[],4),3));
+    elseif strcmpi(measure,'centrality')
+        plotdata = squeeze(mean(max(graph{m,weiorbin}(:,bandidx,trange,:),[],4),3));
+    elseif strcmpi(measure,'mutual information')
+        plotdata = squeeze(mean(mean(graph{m,weiorbin}(:,:,bandidx,trange),4),2));
+    elseif strcmpi(measure,'participation coefficient')
+        plotdata = squeeze(mean(std(graph{m,weiorbin}(:,bandidx,trange,:),[],4),3));
+    else
+        plotdata = squeeze(mean(mean(graph{m,weiorbin}(:,bandidx,trange,:),4),3));
+    end
 end
+
+subjlist = eval(listname);
+grp = cell2mat(subjlist(:,2:end));
 
 figure('Color','white');
 hold all
