@@ -89,7 +89,9 @@ num_mod = length(unique(minfo));
 figure('Color','black','Name',mfilename);
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
-cmap = colormap(hsv);
+cmap = jet;
+cmap = circshift(cmap,round(size(cmap,1)/2),1);
+cmap = colormap(cmap);
 colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
 
 hold all
