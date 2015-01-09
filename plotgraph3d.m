@@ -16,8 +16,8 @@ param = finputcheck(varargin, {
     'escale', 'real', [], []; ...
     'vscale', 'real', [], []; ...
     'view', 'real', [], []; ...
-    'cshift', 'real', [], []; ...    
-    'numcolors', 'real', [], 6; ...    
+    'cshift', 'real', [], []; ...
+    'numcolors', 'real', [], 6; ...
     });
 
 %%%%% VISUAL FEATURES
@@ -89,10 +89,9 @@ num_mod = length(unique(minfo));
 figure('Color','black','Name',mfilename);
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
-cmap = jet;
-cmap = circshift(cmap,round(size(cmap,1)/2),1);
-cmap = colormap(cmap);
+cmap = hsv;
 colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
+% colorlist = circshift(colorlist,2,1);
 
 hold all
 
@@ -110,7 +109,7 @@ for r = 1:size(matrix,1)
             if minfo(r) == minfo(c)
                 ecol = colorlist(minfo(r),:);
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.5);
-%                 set(hLine,'Color',ecol,'LineWidth',0.1);
+                %                 set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
                 ecol = [0 0 0];
