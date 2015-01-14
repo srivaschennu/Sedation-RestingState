@@ -32,7 +32,7 @@ lhfactor = 2;
 %%%%%%
 
 load chanlist
-[sortedchan,sortidx] = sort({chanlocs.labels});
+[sortedchan,sortidx] = sort({chanlocs.labels});ope
 if ~strcmp(chanlist,cell2mat(sortedchan))
     error('Channel names do not match!');
 end
