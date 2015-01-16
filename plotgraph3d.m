@@ -1,4 +1,4 @@
-function minfo = plotgraph3d(matrix,chanlocs,varargin)
+function minfo = plotgraph3d(matrix,splinefile,varargin)
 
 % matrix - NxN symmetric connectivity matrix, where N is the number of channels
 % chanlocs - 1xN EEGLAB chanlocs structure specifying channel locations
@@ -16,14 +16,11 @@ param = finputcheck(varargin, {
     'escale', 'real', [], []; ...
     'vscale', 'real', [], []; ...
     'view', 'real', [], []; ...
-    'cshift', 'real', [], []; ...
+    'cshift', 'real', [], 0.4; ...
     'numcolors', 'real', [], 6; ...
     });
 
 %%%%% VISUAL FEATURES
-
-%spline file
-splinefile = '91_spline.spl';
 
 % range of line heights
 lhfactor = 2;
