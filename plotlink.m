@@ -10,6 +10,13 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 30;
 
+colorlist = [
+%     0 0.0 1
+%     0 0.5 0
+    0.5 0.0 0
+    0   0.5 0.5
+    ];
+
 loadpaths
 
 load(sprintf('%s/%s/graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
@@ -37,8 +44,8 @@ trange = (tvals <= trange(1) & tvals >= trange(2));
 
 switch measure
     case 'drug'
-        plotdata = grp(:,2);
-        param.ylabel = 'Drug in blood (\mug/l)';
+        plotdata = grp(:,2)/1000;
+        param.ylabel = 'Drug in blood (\mug/ml)';
     case 'rt'
         plotdata = grp(:,3);
         param.ylabel = 'Reaction times (ms)';
@@ -97,13 +104,15 @@ bands = {
     };
 
 for g = grouplist
-    sg_h(g) = scatter(grp(grp(:,5) == g,1),plotdata(grp(:,5) == g),200,markers{g},...
+    sg_h(g) = scatter(grp(grp(:,5) == g,1),plotdata(grp(:,5) == g),200,colorlist(g,:),markers{g},...
         'filled','DisplayName',groupnames{g});
 end
 
 set(gca,'FontSize',fontsize,'FontName',fontname);
 set(gca,'XTick',unique(grp(grp(:,5) == g,1)),'XTickLabel',levelnames);
 set(gcf,'Color','white');
+
+% set(gca,'XLim',[2 4]);
 
 if strcmp(param.xlabel,'on')
     xlabel('Sedation level');

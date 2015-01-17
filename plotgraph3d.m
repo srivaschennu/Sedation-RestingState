@@ -1,4 +1,4 @@
-function minfo = plotgraph3d(matrix,splinefile,varargin)
+function minfo = plotgraph3d(matrix,chanlocs,splinefile,varargin)
 
 % matrix - NxN symmetric connectivity matrix, where N is the number of channels
 % chanlocs - 1xN EEGLAB chanlocs structure specifying channel locations
@@ -28,12 +28,12 @@ lhfactor = 2;
 
 %%%%%%
 
-load chanlist
-[sortedchan,sortidx] = sort({chanlocs.labels});ope
-if ~strcmp(chanlist,cell2mat(sortedchan))
-    error('Channel names do not match!');
-end
-matrix = matrix(sortidx,sortidx);
+% load chanlist
+% [sortedchan,sortidx] = sort({chanlocs.labels});
+% if ~strcmp(chanlist,cell2mat(sortedchan))
+%     error('Channel names do not match!');
+% end
+% matrix = matrix(sortidx,sortidx);
 
 %keep only top <plotqt>% of weights
 matrix = threshold_proportional(matrix,1-param.plotqt);

@@ -111,6 +111,7 @@ scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),hitrate(grp(
     200,colorlist(1,:),markers{testgroups(1)},'filled');
 scatter(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),hitrate(grp(:,1) == 3 & grp(:,5) == testgroups(2)),...
     200,colorlist(2,:),markers{testgroups(2)},'filled');
+
 set(gca,'FontName',fontname,'FontSize',fontsize);
 if isempty(param.ylabel)
     ylabel('Perceptual hit rate (%)','FontName',fontname,'FontSize',fontsize);
@@ -125,6 +126,19 @@ end
 if ~isempty(param.ytick)
     set(gca,'YTick',param.ytick);
 end
+
+% xlimits = xlim;
+% xdata = testdata(grp(:,1) == testlevel);
+% ydata = drug(grp(:,1) == 3);
+% zdata = hitrate(grp(:,1) == 3);
+% grpdata = grp(grp(:,1) == testlevel,5);
+% for p = 1:size(xdata,1)
+%     if grpdata(p) == testgroups(1) || grpdata(p) == testgroups(2)
+%         plot3([xdata(p) xdata(p)],[ydata(p) ydata(p)],[zdata(p) 0],'LineStyle',':','Color',colorlist(grpdata(p),:));
+%         plot3([xdata(p) xlimits(2)],[ydata(p) ydata(p)],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
+%         plot3([xdata(p) xdata(p)],[ydata(p) 0],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
+%     end
+% end
 
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*9/8;
