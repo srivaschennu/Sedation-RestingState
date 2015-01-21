@@ -26,8 +26,10 @@ rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
 
 colorlist = [
-    0 0.0 1
-    0 0.5 0
+%     0 0.0 1
+%     0 0.5 0
+    0.5 0.0 0
+    0   0.5 0.5
     ];
 
 weiorbin = 2;
@@ -178,8 +180,9 @@ hdl = barweb(groupmean,groupste,[],[],[],'','');
     testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(2)),[],[],'unequal');
 fprintf('t(%.1f) = %.2f, p = %.3f.\n',stats.df,stats.tstat,pval);
 set(hdl.ax,'FontName',fontname,'FontSize',fontsize);
-defcolororder = get(0,'DefaultAxesColorOrder');
-set(hdl.bars(2),'FaceColor',defcolororder(2,:));
+for g = 1:2
+    set(hdl.bars(g),'FaceColor',colorlist(g,:));
+end
 xlabel(levelnames{testlevel},'FontName',fontname,'FontSize',fontsize);
 ylabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.ytick)
