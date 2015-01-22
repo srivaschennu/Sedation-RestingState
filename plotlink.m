@@ -2,6 +2,7 @@ function plotlink(listname,conntype,measure,bandidx,varargin)
 
 param = finputcheck(varargin, {
     'ylabel', 'string', [], measure; ...
+    'xlim', 'real', [], []; ...
     'ylim', 'real', [], []; ...
     'legend', 'string', {'on','off'}, 'off'; ...
     'xlabel', 'string', {'on','off'}, 'off'; ...
@@ -9,6 +10,8 @@ param = finputcheck(varargin, {
 
 fontname = 'Helvetica';
 fontsize = 30;
+
+xcol = 2;
 
 colorlist = [
 %     0 0.0 1
@@ -104,7 +107,43 @@ bands = {
     };
 
 for g = grouplist
-    sg_h(g) = scatter(grp(grp(:,5) == g,1),plotdata(grp(:,5) == g),200,colorlist(g,:),markers{g},...
+    for l = 1:3
+        xdata(l,:) = grp(grp(:,1) == l & grp(:,5) == g,xcol)/1000;
+        ydata(l,:) = plotdata(grp(:,1) == l & grp(:,5) == g);
+    end
+    plot(xdata,ydata,'MarkerSize',12,'Color',colorlist(g,:),'Marker',markers{g},'LineWidth',1,...
+        'MarkerFaceColor',colorlist(g,:),'MarkerEdgeColor',colorlist(g,:),'DisplayName',groupnames{g});
+end
+set(gca,'FontSize',fontsize,'FontName',fontname);
+set(gcf,'Color','white');
+
+if strcmp(param.xlabel,'on')
+    xlabel('Drug in blood (\mug/ml)');
+else
+    xlabel(' ');
+end
+
+ylabel(param.ylabel);
+
+if ~isempty(param.xlim)
+    xlim(param.xlim);
+end
+
+if ~isempty(param.ylim)
+    ylim(param.ylim);
+end
+
+export_fig(gcf,sprintf('figures/drug_vs_%s_%s.eps',measure,bands{bandidx}));
+close(gcf);
+
+
+
+
+figure('Color','white');
+hold all
+
+for g = grouplist
+    sg_h(g) = scatter(grp(grp(:,5) == g,xcol),plotdata(grp(:,5) == g),200,colorlist(g,:),markers{g},...
         'filled','DisplayName',groupnames{g});
 end
 
@@ -132,9 +171,9 @@ end
 for s = 1:4:size(subjlist,1)
     if sum(ismember(grp(s,5),grouplist)) == 1
         linecolor = get(sg_h(grp(s,5)),'CData');
-        line([grp(s,1) grp(s+1,1)],[plotdata(s) plotdata(s+1)],'Color',linecolor,'LineWidth',1);
-        line([grp(s+1,1) grp(s+2,1)],[plotdata(s+1) plotdata(s+2)],'Color',linecolor,'LineWidth',1);
-        line([grp(s+2,1) grp(s+3,1)],[plotdata(s+2) plotdata(s+3)],'Color',linecolor,'LineWidth',1);
+        line([grp(s,xcol) grp(s+1,xcol)],[plotdata(s) plotdata(s+1)],'Color',linecolor,'LineWidth',1);
+        line([grp(s+1,xcol) grp(s+2,xcol)],[plotdata(s+1) plotdata(s+2)],'Color',linecolor,'LineWidth',1);
+        line([grp(s+2,xcol) grp(s+3,xcol)],[plotdata(s+2) plotdata(s+3)],'Color',linecolor,'LineWidth',1);
     end
 end
 

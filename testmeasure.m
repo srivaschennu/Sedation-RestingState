@@ -137,10 +137,16 @@ end
 % for p = 1:size(xdata,1)
 %     if grpdata(p) == testgroups(1) || grpdata(p) == testgroups(2)
 %         plot3([xdata(p) xdata(p)],[ydata(p) ydata(p)],[zdata(p) 0],'LineStyle',':','Color',colorlist(grpdata(p),:));
-%         plot3([xdata(p) xlimits(2)],[ydata(p) ydata(p)],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
-%         plot3([xdata(p) xdata(p)],[ydata(p) 0],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
+% %         plot3([xdata(p) xlimits(2)],[ydata(p) ydata(p)],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
+% %         plot3([xdata(p) xdata(p)],[ydata(p) 0],[zdata(p) zdata(p)],'LineStyle',':','Color',colorlist(grpdata(p),:));
 %     end
 % end
+% 
+% view(-46,30)
+% grid on
+% zlabel(param.ylabel,'FontName',fontname,'FontSize',fontsize);
+% ylabel('Drug in blood (\mug/ml)')
+% set(gca,'YDir','reverse')
 
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*9/8;
