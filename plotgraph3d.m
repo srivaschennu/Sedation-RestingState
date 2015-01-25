@@ -28,12 +28,12 @@ lhfactor = 2;
 
 %%%%%%
 
-% load chanlist
-% [sortedchan,sortidx] = sort({chanlocs.labels});
-% if ~strcmp(chanlist,cell2mat(sortedchan))
-%     error('Channel names do not match!');
-% end
-% matrix = matrix(sortidx,sortidx);
+load chanlist
+[sortedchan,sortidx] = sort({chanlocs.labels});
+if ~strcmp(chanlist,cell2mat(sortedchan))
+    error('Channel names do not match!');
+end
+matrix = matrix(sortidx,sortidx);
 
 %keep only top <plotqt>% of weights
 matrix = threshold_proportional(matrix,1-param.plotqt);
@@ -86,9 +86,9 @@ num_mod = length(unique(minfo));
 figure('Color','black','Name',mfilename);
 figpos = get(gcf,'Position');
 set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
-cmap = hsv;
+cmap = jet;
 colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
-% colorlist = circshift(colorlist,2,1);
+colorlist = circshift(colorlist,4,1);
 
 hold all
 
@@ -105,7 +105,7 @@ for r = 1:size(matrix,1)
             eheight = (matrix(r,c)*lhfactor)+1;
             if minfo(r) == minfo(c)
                 ecol = colorlist(minfo(r),:);
-                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.5);
+                hLine = plotarc3d(chanlocs3d([r,c],:),eheight,ecol,0.2);
                 %                 set(hLine,'Color',ecol,'LineWidth',0.1);
             elseif strcmp(param.plotinter,'on')
                 hLine = plotarc3d(chanlocs3d([r,c],:),eheight);
