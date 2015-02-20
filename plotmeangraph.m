@@ -54,8 +54,8 @@ for g = 1:length(grouplist)
     campos([-1.7547    1.7161    1.4666]*1000);
     fprintf('%s %s %s - number of modules: %d\n',grouplist{g},levelnames{plotlevel},bands{bandidx},length(unique(minfo(g,:))));
     set(gcf,'Name',sprintf('%s %s %s',grouplist{g},levelnames{plotlevel},bands{bandidx}));
-%     export_fig(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}),'-nocrop','-m2');
     set(gcf,'InvertHardCopy','off');
-    saveas(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}));
+    print(gcf,sprintf('figures/meangraph_%s_%s_%s.tif',grouplist{g},levelnames{plotlevel},bands{bandidx}),'-dtiff','-r150');
+    saveas(gcf,sprintf('figures/meangraph_%s_%s_%s.fig',grouplist{g},levelnames{plotlevel},bands{bandidx}));
     close(gcf);
 end
