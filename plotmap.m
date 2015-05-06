@@ -61,8 +61,8 @@ bands = {
     'delta'
     'theta'
     'alpha'
-    %     'beta'
-    %     'gamma'
+    'beta'
+    'gamma'
     };
 
 grouplist = {
