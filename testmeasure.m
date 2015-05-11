@@ -164,13 +164,13 @@ figpos(3) = figpos(3)*1/2;
 set(gcf,'Position',figpos);
 
 hold all
-if strcmpi(measure,'power')
+if strcmpi(measure,'power') && bandidx <= 3
     testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
 end
 dataout = [];
 grpout = [];
 for g = 1:2
-    if strcmpi(measure,'power')
+    if strcmpi(measure,'power') && bandidx <= 3
         plotdata = ( testdata2(grp(:,1) == testlevel & grp(:,5) == g) ./ testdata(grp(:,1) == testlevel & grp(:,5) == g) );
     else
         plotdata = testdata(grp(:,1) == testlevel & grp(:,5) == g);
