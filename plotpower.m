@@ -15,7 +15,7 @@ load chanlist
 load freqlist
 
 fontname = 'Helvetica';
-fontsize = 34;
+fontsize = 28;
 
 bands = {
     'Delta'
@@ -75,7 +75,7 @@ for g = 1:length(groups)
     %     subplot(1,length(groups),p);
     figure('Color','white');
     plot(freqbins,10*log10(squeeze(mean(spectra(grp(:,1) == plotlevel & grp(:,5) == groups(g),:,:),1))),'LineWidth',2);
-    set(gca,'XLim',[0 35],'YLim',[-25 25],'FontName',fontname,'FontSize',fontsize);
+    set(gca,'XLim',[0 45],'YLim',[-25 25],'FontName',fontname,'FontSize',fontsize);
     if strcmp(param.xlabel,'on') && g == 1
         xlabel('Frequency (Hz)','FontName',fontname,'FontSize',fontsize);
     else
@@ -94,7 +94,7 @@ for g = 1:length(groups)
     if ~isempty(param.ylim)
         ylim(param.ylim);
     end
-    for f = 1:4%size(freqlist,1)
+    for f = 1:size(freqlist,1)
         line([freqlist(f,1) freqlist(f,1)],ylim,'LineWidth',1,'LineStyle','--','Color','black');
     end
     p = p+1;
