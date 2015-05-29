@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 32;
+fontsize = 34;
 
 loadpaths
 loadsubj
@@ -26,7 +26,7 @@ rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
 
 colorlist = [
-    0 0.0 0.5
+    0 0.0 1
     0 0.5 0
 %     0.5 0.0 0
 %     0   0.5 0.5
@@ -160,7 +160,7 @@ close(gcf);
 figure('Color','white');
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*1/2;
-% figpos(4) = figpos(4)/2;
+% figpos(4) = figpos(4)*3/4;
 set(gcf,'Position',figpos);
 
 hold all
@@ -227,7 +227,7 @@ legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,colorlist(2,:)
 mdl = LinearModel.fit(xvals(keepvals),yvals(keepvals));
 b = mdl.Coefficients.Estimate;
 plot(sort(xvals),b(1)+b(2)*sort(xvals),'Color','black','LineWidth',2,'LineStyle','--',......
-    'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+    'Display',sprintf('R^2 = %.2f, p = %.4f',mdl.Rsquared.Adjusted,doftest(mdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
@@ -241,7 +241,7 @@ legend('boxoff');
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*3/2;
 % figpos(4) = figpos(4)/2;
-set(gcf,'Position',figpos);
+% set(gcf,'Position',figpos);
 if ~isempty(param.xtick)
     set(gca,'XTick',param.xtick);
 end
@@ -303,7 +303,7 @@ legend('Location',param.legendlocation);
 legend('boxoff');
 
 figpos = get(gcf,'Position');
-figpos(3) = figpos(3)*3/2;
+% figpos(3) = figpos(3)*3/2;
 % figpos(4) = figpos(4)/2;
 set(gcf,'Position',figpos);
 
