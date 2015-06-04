@@ -1,7 +1,7 @@
 function [dataout,grpout,pval,stats] = testmeasure(listname,conntype,measure,testlevel,bandidx,varargin)
 
 param = finputcheck(varargin, {
-    'changroup', 'string', [], ''; ...
+    'changroup', 'string', [], 'all'; ...
     'xlabel', 'string', [], measure; ...
     'ylabel', 'string', [], ''; ...
     'xlim', 'real', [], []; ...
@@ -44,9 +44,9 @@ elseif strcmpi(measure,'power')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     power = load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     testdata = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup))),3) * 100;
-elseif strcmpi(measure,'mean')
+elseif strcmpi(measure,'median')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
-    testdata = mean(mean(allcoh(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup))),4),3);
+    testdata = median(median(allcoh(:,bandidx,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup))),4),3);
 elseif strcmpi(measure,'pac')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));
     allpac = allpac(:,:,ismember({sortedlocs.labels},eval(param.changroup)),ismember({sortedlocs.labels},eval(param.changroup)));
@@ -227,7 +227,7 @@ legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,colorlist(2,:)
 mdl = LinearModel.fit(xvals(keepvals),yvals(keepvals));
 b = mdl.Coefficients.Estimate;
 plot(sort(xvals),b(1)+b(2)*sort(xvals),'Color','black','LineWidth',2,'LineStyle','--',......
-    'Display',sprintf('R^2 = %.2f, p = %.4f',mdl.Rsquared.Adjusted,doftest(mdl)));
+    'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
