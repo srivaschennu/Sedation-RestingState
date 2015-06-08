@@ -15,7 +15,7 @@ load chanlist
 weiorbin = 2;
 
 fontname = 'Helvetica';
-fontsize = 28;
+fontsize = 60;
 
 if strcmpi(measure,'power')
     load(sprintf('%s/%s/alldata_%s_%s.mat',filepath,conntype,listname,conntype));

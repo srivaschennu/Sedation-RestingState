@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 34;
+fontsize = 30;
 
 loadpaths
 loadsubj
@@ -26,7 +26,7 @@ rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
 
 colorlist = [
-    0 0.0 1
+    0 0.0 0.5
     0 0.5 0
 %     0.5 0.0 0
 %     0   0.5 0.5
