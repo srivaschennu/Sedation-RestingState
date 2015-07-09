@@ -32,7 +32,7 @@ colorlist = [
 %     0   0.5 0.5
     ];
 
-weiorbin = 2;
+weiorbin = 3;
 
 if strcmpi(measure,'drug')
     testdata = drug;
@@ -62,10 +62,12 @@ else
     randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
     graph{end+1,1} = 'small-worldness';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
+    graph{end,3} = ( mean(graph{1,3},4) ./ mean(mean(randgraph.graph{1,3},5),4) ) ./ ( graph{2,3} ./ mean(randgraph.graph{2,3},4) ) ;
     
     if ~strcmpi(measure,'small-worldness')
         m = find(strcmpi(measure,graph(:,1)));
         graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
+        graph{m,3} = graph{m,3} ./ mean(randgraph.graph{m,3},ndims(randgraph.graph{m,3}));
     end
     m = find(strcmpi(measure,graph(:,1)));
     if strcmpi(measure,'modules')
