@@ -49,6 +49,7 @@ elseif strcmp(param.randratio,'on')
 end
 
 levelnames = {'Baseline','Mild','Moderate','Recovery'};
+groupnames = {'Responsive','Drowsy'};
 
 bands = {
     'Delta'
@@ -115,6 +116,7 @@ m = find(strcmpi(measure,graph(:,1)));
         ylimits = ylim;
     end
     
+    set(gcf,'Name',sprintf('%s_%s_%s',listname,measure,bands{bandidx}));
     export_fig(gcf,sprintf('figures/%s_%s_%s.eps',listname,measure,bands{bandidx}));
     close(gcf);
 end
