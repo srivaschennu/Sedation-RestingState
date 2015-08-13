@@ -32,7 +32,7 @@ colorlist = [
 %     0   0.5 0.5
     ];
 
-weiorbin = 3;
+weiorbin = 2;
 
 if strcmpi(measure,'drug')
     testdata = drug;
