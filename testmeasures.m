@@ -36,6 +36,10 @@ datatable = table(group,data(:,1),data(:,2),data(:,3),data(:,4),'VariableNames',
 design = table({'Baseline'; 'Mild'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
 rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
 
+% datatable = table(group,data(:,1),data(:,2),data(:,3),'VariableNames',{'group','Mild','Moderate','Recovery'});
+% design = table({'Mild'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
+% rmmodel = fitrm(datatable,'Mild-Recovery~group','WithinDesign',design);
+
 % datatable = table(group,data(:,1),data(:,2),'VariableNames',{'group','Baseline','Moderate'});
 % design = table({'Baseline'; 'Moderate'},'VariableNames',{'Levels'});
 % rmmodel = fitrm(datatable,'Baseline-Moderate~group','WithinDesign',design);

@@ -11,13 +11,13 @@ param = finputcheck(varargin, {
 fontname = 'Helvetica';
 fontsize = 30;
 
-xcol = 2;
+xcol = 1;
 
 colorlist = [
-%     0 0.0 1
-%     0 0.5 0
-    0.5 0.0 0
-    0   0.5 0.5
+    0 0.0 1
+    0 0.5 0
+%     0.5 0.0 0
+%     0   0.5 0.5
     ];
 
 loadpaths
@@ -107,7 +107,8 @@ bands = {
     };
 
 for g = grouplist
-    for l = 1:3
+    xdata = []; ydata = [];
+    for l = 1:4
         xdata(l,:) = grp(grp(:,1) == l & grp(:,5) == g,xcol)/1000;
         ydata(l,:) = plotdata(grp(:,1) == l & grp(:,5) == g);
     end
@@ -151,7 +152,7 @@ set(gca,'FontSize',fontsize,'FontName',fontname);
 set(gca,'XTick',unique(grp(grp(:,5) == g,1)),'XTickLabel',levelnames);
 set(gcf,'Color','white');
 
-% set(gca,'XLim',[2 4]);
+set(gca,'XLim',[2 4]);
 
 if strcmp(param.xlabel,'on')
     xlabel('Sedation level');

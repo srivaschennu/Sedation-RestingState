@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 30;
+fontsize = 36;
 
 loadpaths
 loadsubj
@@ -62,12 +62,12 @@ else
     randgraph = load(sprintf('%s/%s/graphdata_%s_rand_%s.mat',filepath,conntype,listname,conntype));
     graph{end+1,1} = 'small-worldness';
     graph{end,2} = ( mean(graph{1,2},4) ./ mean(mean(randgraph.graph{1,2},5),4) ) ./ ( graph{2,2} ./ mean(randgraph.graph{2,2},4) ) ;
-    graph{end,3} = ( mean(graph{1,3},4) ./ mean(mean(randgraph.graph{1,3},5),4) ) ./ ( graph{2,3} ./ mean(randgraph.graph{2,3},4) ) ;
+%     graph{end,3} = ( mean(graph{1,3},4) ./ mean(mean(randgraph.graph{1,3},5),4) ) ./ ( graph{2,3} ./ mean(randgraph.graph{2,3},4) ) ;
     
     if ~strcmpi(measure,'small-worldness')
         m = find(strcmpi(measure,graph(:,1)));
         graph{m,2} = graph{m,2} ./ mean(randgraph.graph{m,2},ndims(randgraph.graph{m,2}));
-        graph{m,3} = graph{m,3} ./ mean(randgraph.graph{m,3},ndims(randgraph.graph{m,3}));
+%         graph{m,3} = graph{m,3} ./ mean(randgraph.graph{m,3},ndims(randgraph.graph{m,3}));
     end
     m = find(strcmpi(measure,graph(:,1)));
     if strcmpi(measure,'modules')
@@ -229,7 +229,7 @@ legendoff(scatter(xdata{2}(~keepidx{2}),ydata{2}(~keepidx{2}),200,colorlist(2,:)
 mdl = LinearModel.fit(xvals(keepvals),yvals(keepvals));
 b = mdl.Coefficients.Estimate;
 plot(sort(xvals),b(1)+b(2)*sort(xvals),'Color','black','LineWidth',2,'LineStyle','--',......
-    'Display',sprintf('R^2 = %.2f, p = %.3f',mdl.Rsquared.Adjusted,doftest(mdl)));
+    'Display',sprintf('R^2 = %.2f, p = %.4f',mdl.Rsquared.Adjusted,doftest(mdl)));
 
 set(gca,'FontName',fontname,'FontSize',fontsize);
 xlabel(param.xlabel,'FontName',fontname,'FontSize',fontsize);
@@ -243,7 +243,7 @@ legend('boxoff');
 figpos = get(gcf,'Position');
 figpos(3) = figpos(3)*3/2;
 % figpos(4) = figpos(4)/2;
-% set(gcf,'Position',figpos);
+set(gcf,'Position',figpos);
 if ~isempty(param.xtick)
     set(gca,'XTick',param.xtick);
 end
@@ -262,9 +262,11 @@ hold all
 
 keepidx = true(length(xdata),1);
 keepidx(isnan(xdata)) = 0;
-[~,~,~,outid,~,~] = skipped_correlation(xdata(keepidx),ydata(keepidx),0);
-keepidx(outid{1}) = 0;
-
+try
+    [~,~,~,outid,~,~] = skipped_correlation(xdata(keepidx),ydata(keepidx),0);
+    keepidx(outid{1}) = 0;
+catch
+end
 legendoff(scatter(xdata(keepidx),ydata(keepidx),200,colorlist(1,:),'^','filled'));
 legendoff(scatter(xdata(~keepidx),ydata(~keepidx),200,colorlist(1,:),'^','filled'));
 
