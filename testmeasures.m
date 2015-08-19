@@ -23,6 +23,7 @@ for l = 1:length(levels)
 end
 
 pvals = bonf_holm(pvals,0.05);
+% pvals = fdr(pvals);
 
 fprintf('After correction:\n');
 for l = 1:length(levels)
@@ -30,11 +31,11 @@ for l = 1:length(levels)
     fprintf('%s %s: t(%.1f) = %.2f, p = %.3f%s.\n',levelnames{levels(l)},measure,stats(l).df,abs(stats(l).tstat),pvals(l),siglevel);
 end
 
-group = cat(1,repmat({'Responsive'},13,1),repmat({'Drowsy'},7,1));
-
-datatable = table(group,data(:,1),data(:,2),data(:,3),data(:,4),'VariableNames',{'group','Baseline','Mild','Moderate','Recovery'});
-design = table({'Baseline'; 'Mild'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
-rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
+% group = cat(1,repmat({'Responsive'},13,1),repmat({'Drowsy'},7,1));
+% 
+% datatable = table(group,data(:,1),data(:,2),data(:,3),data(:,4),'VariableNames',{'group','Baseline','Mild','Moderate','Recovery'});
+% design = table({'Baseline'; 'Mild'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
+% rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
 
 % datatable = table(group,data(:,1),data(:,2),data(:,3),'VariableNames',{'group','Mild','Moderate','Recovery'});
 % design = table({'Mild'; 'Moderate'; 'Recovery'},'VariableNames',{'Levels'});
@@ -44,6 +45,6 @@ rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
 % design = table({'Baseline'; 'Moderate'},'VariableNames',{'Levels'});
 % rmmodel = fitrm(datatable,'Baseline-Moderate~group','WithinDesign',design);
 
-rmanovatbl = ranova(rmmodel)
+% rmanovatbl = ranova(rmmodel)
 
 
