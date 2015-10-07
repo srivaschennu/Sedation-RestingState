@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 36;
+fontsize = 30;
 
 loadpaths
 loadsubj
