@@ -1,6 +1,6 @@
 function [dataout,grpout,pval,stats] = testmeasure(listname,conntype,measure,testlevel,bandidx,varargin)
 
-param = finputcheck(varargin, {
+param = finputcheck(varargin, { 
     'changroup', 'string', [], 'all'; ...
     'xlabel', 'string', [], measure; ...
     'ylabel', 'string', [], ''; ...
@@ -12,7 +12,7 @@ param = finputcheck(varargin, {
     });
 
 fontname = 'Helvetica';
-fontsize = 30;
+fontsize = 28;
 
 loadpaths
 loadsubj
@@ -26,7 +26,7 @@ rt = cell2mat(subjlist(:,4));
 hitrate = (cell2mat(subjlist(:,5))/40)*100;
 
 colorlist = [
-    0 0.0 0.5
+    0 0.0 1
     0 0.5 0
 %     0.5 0.0 0
 %     0   0.5 0.5
@@ -237,7 +237,7 @@ ylabel('Drug in blood (\mug/ml)','FontName',fontname,'FontSize',fontsize);
 if ~isempty(param.xlim)
     xlim(param.xlim);
 end
-legend('Location','Best');
+legend('Location',param.legendlocation);
 legend('boxoff');
 
 figpos = get(gcf,'Position');
