@@ -9,6 +9,7 @@ param = finputcheck(varargin, {
     'xtick', 'real', [], []; ...
     'ytick', 'real', [], []; ...
     'legendlocation', 'string', [], 'Best'; ...
+    'noplot', 'string', {'on','off'}, 'off'; ...
     });
 
 fontname = 'Helvetica';
@@ -53,7 +54,6 @@ elseif strcmpi(measure,'pac')
     for s = 1:size(allpac,1)
         testdata(s,1,:) = mean(diag(squeeze(allpac(s,1,:,:))));
     end
-    testdata = repmat(testdata,1,5);
 else
     trange = [0.5 0.1];
     load(sprintf('%s%s//graphdata_%s_%s.mat',filepath,conntype,listname,conntype));
@@ -106,6 +106,26 @@ levelnames = {'Baseline','Mild','Moderate','Recovery'};
 
 testgroups = [1 2];
 
+if strcmpi(measure,'power') && bandidx <= 3
+    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
+end
+dataout = [];
+grpout = [];
+for g = 1:2
+    if strcmpi(measure,'power') && bandidx <= 3
+        plotdata = ( testdata2(grp(:,1) == testlevel & grp(:,5) == g) ./ testdata(grp(:,1) == testlevel & grp(:,5) == g) );
+    else
+        plotdata = testdata(grp(:,1) == testlevel & grp(:,5) == g);
+    end
+    groupmean(g) = nanmean(plotdata);
+    groupste(g) = nanstd(plotdata)/sqrt(length(plotdata));
+    dataout = cat(1,dataout,plotdata);
+    grpout = cat(1,grpout,repmat(g,length(plotdata),1));
+end
+
+if strcmp(param.noplot,'on')
+    return;
+end
 
 %scatter plot
 markers = {'^','v'};
@@ -166,22 +186,6 @@ figpos(3) = figpos(3)*1/2;
 set(gcf,'Position',figpos);
 
 hold all
-if strcmpi(measure,'power') && bandidx <= 3
-    testdata2 = mean(power.bandpower(:,bandidx,ismember({sortedlocs.labels},eval('frontalalpha'))),3) * 100;
-end
-dataout = [];
-grpout = [];
-for g = 1:2
-    if strcmpi(measure,'power') && bandidx <= 3
-        plotdata = ( testdata2(grp(:,1) == testlevel & grp(:,5) == g) ./ testdata(grp(:,1) == testlevel & grp(:,5) == g) );
-    else
-        plotdata = testdata(grp(:,1) == testlevel & grp(:,5) == g);
-    end
-    groupmean(g) = nanmean(plotdata);
-    groupste(g) = nanstd(plotdata)/sqrt(length(plotdata));
-    dataout = cat(1,dataout,plotdata);
-    grpout = cat(1,grpout,repmat(g,length(plotdata),1));
-end
 
 hdl = barweb(groupmean,groupste,[],[],[],'','');
 [~,pval,~,stats] = ttest2(testdata(grp(:,1) == testlevel & grp(:,5) == testgroups(1)),...
