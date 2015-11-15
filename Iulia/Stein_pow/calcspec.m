@@ -1,6 +1,10 @@
 function calcspec(basename)
 
-loadpaths
+AddPaths;
+eeglab;
+clearvars -except basename;
+
+filepath = '/home/sc03/Iulia/Iulia/Stein_pow';
 
 EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
 
@@ -17,8 +21,5 @@ for e = 1:EEG.trials
 end
 close(wb_h);
 
-load freqlist
-EEG.freqlist = freqlist;
-
 EEG.saved = 'no';
-pop_saveset(EEG,'savemode','resave');
+pop_saveset(EEG,'filepath',filepath,'filename',[basename '_spec.set']);

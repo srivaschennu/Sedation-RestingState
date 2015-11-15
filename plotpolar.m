@@ -41,6 +41,8 @@ for s = 1:length(subjidx)
         binc(bidx) = (phbins(bidx)+phbins(bidx+1))/2;
     end
     
+    amph = amph * 100 / sum(amph);
+    
     amph(end+1) = amph(1);
     binc(end+1) = binc(1);
     
@@ -48,4 +50,7 @@ for s = 1:length(subjidx)
     set(hpol,'Color',colorlist(s,:),'LineWidth',2);
     hold on
 end
-export_fig(gcf,sprintf('figures/polarplot_%d.eps',plot
+export_fig(gcf,sprintf('figures/polarplot_%d.eps',plotlevel));
+close(gcf);
+
+end
