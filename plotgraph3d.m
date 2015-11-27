@@ -28,12 +28,12 @@ lhfactor = 2;
 
 %%%%%%
 
-load chanlist
-[sortedchan,sortidx] = sort({chanlocs.labels});
-if ~strcmp(chanlist,cell2mat(sortedchan))
-    error('Channel names do not match!');
-end
-matrix = matrix(sortidx,sortidx);
+% load chanlist
+% [sortedchan,sortidx] = sort({chanlocs.labels});
+% if ~strcmp(chanlist,cell2mat(sortedchan))
+%     error('Channel names do not match!');
+% end
+% matrix = matrix(sortidx,sortidx);
 
 %keep only top <plotqt>% of weights
 matrix = threshold_proportional(matrix,1-param.plotqt);
@@ -83,9 +83,9 @@ end
 minfo = newminfo;
 num_mod = length(unique(minfo));
 
-figure('Color','black','Name',mfilename);
-figpos = get(gcf,'Position');
-set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
+% figure('Color','black','Name',mfilename);
+% figpos = get(gcf,'Position');
+% set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
 cmap = jet;
 colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
 colorlist = circshift(colorlist,4,1);
