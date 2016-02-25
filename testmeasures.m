@@ -23,7 +23,7 @@ elseif strcmp(measure,'rt')
 else
     datatable = table(grouplist,data(:,1),data(:,2),data(:,3),data(:,4),'VariableNames',{'group','Baseline','Mild','Moderate','Recovery'});
     design = table(levelnames,'VariableNames',{'levels'});
-    rmmodel = fitrm(datatable,'Baseline-Recovery~group','WithinDesign',design);
+    rmmodel = fitrm(datatable,'Baseline-Recovery~1','WithinDesign',design);
 end
 
 rmanovatbl = ranova(rmmodel);
