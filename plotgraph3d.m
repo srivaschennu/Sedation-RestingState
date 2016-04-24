@@ -44,7 +44,7 @@ end
 
 % calculate modules after thresholding edges
 if isempty(param.minfo)
-    minfo = modularity_louvain_und(matrix);
+    minfo = community_louvain(matrix);
 else
     minfo = param.minfo;
 end
@@ -83,9 +83,9 @@ end
 minfo = newminfo;
 num_mod = length(unique(minfo));
 
-% figure('Color','black','Name',mfilename);
-% figpos = get(gcf,'Position');
-% set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
+figure('Color','black','Name',mfilename);
+figpos = get(gcf,'Position');
+set(gcf,'Position',[figpos(1) figpos(2) figpos(3)*1.5 figpos(4)*2],'Color','black');
 cmap = jet;
 colorlist = cmap(round(linspace(1,size(cmap,1),param.numcolors)),:);
 colorlist = circshift(colorlist,4,1);
